@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -12,7 +11,7 @@ class CategoryController extends Controller
     {
         // raw sql
         // $categories = DB::select('SELECT * FROM categories');
-        // Query Builder 
+        // Query Builder
         // $categories = DB::table('categories')->get();
         // Eloquent ORM:
         $categories = Category::orderBy('id', 'desc')->get();
@@ -26,45 +25,42 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        // dd(111);
-        // dd(request()->all());
-        Category::create(
-            [
-                'name' => request()->name,
-                'dec' => request()->dec,
-            ]
-        );
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'dec'  => ['required', 'string'],
+        ]);
+
+        Category::create($validated);
         // return view('categories.list'); don't like this
         return redirect('/categories');
     }
 
     public function edit($id)
     {
-        $category = Category::find($id);
-        // dd( $category );
+        $category = Category::findOrFail($id);
         return view('categories.edit', compact('category'));
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
-        // dd($id);
-        // dd(request()->all());
-        $category = Category::find($id);
-        $category->update(
-            [
-                'name' => request()->name,
-                'dec' => request()->dec,
-            ]
-        );
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'dec'  => ['required', 'string'],
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update($validated);
+
         return redirect('/categories');
     }
+
     public function destroy($id)
     {
-        // dd($id);
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         $category->delete();
+
         return redirect('/categories');
     }
 }
