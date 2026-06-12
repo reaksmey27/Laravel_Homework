@@ -3,8 +3,6 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\MovieController;
-use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,9 +36,3 @@ Route::post('/categories', [CategoryController::class, 'store'])->name('categori
 Route::get('/categories/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
-//Movie route:
-Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
-
-//Customer route:
-Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
